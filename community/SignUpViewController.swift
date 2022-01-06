@@ -1,14 +1,14 @@
 //
-//  SignInViewController.swift
+//  SignUpViewController.swift
 //  community
 //
-//  Created by yeop on 2022/01/03.
+//  Created by yeop on 2022/01/06.
 //
 
 import UIKit
 import SnapKit
 
-class SignInViewController: UIViewController{
+class SignUpViewController: UIViewController{
     
     let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -18,23 +18,25 @@ class SignInViewController: UIViewController{
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
-    let idTextField = UITextField()
+    let emailTextField = UITextField()
+    let nickNameTextField = UITextField()
     let passwordTextField = UITextField()
-    let signInButton = UIButton()
-    
+    let passwordConfirmTextField = UITextField()
+    let signUpButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "로그인"
         
         view.addSubview(stackView)
-        stackView.addArrangedSubview(idTextField)
-        stackView.addArrangedSubview(passwordTextField)
-        view.addSubview(signInButton)
         
+        [emailTextField, nickNameTextField, passwordTextField, passwordConfirmTextField,].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        view.addSubview(signUpButton)
+        view.backgroundColor = .white
+        title = "회원가입"
         setUp()
+        
     }
     
     func setUp(){
@@ -44,22 +46,32 @@ class SignInViewController: UIViewController{
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.leading.equalTo(20)
             make.trailing.equalTo(-20)
-            make.height.equalTo(100)
+            make.height.equalTo(400)
         }
-        idTextField.placeholder = "이메일"
-        idTextField.borderStyle = .roundedRect
+        
+        emailTextField.placeholder = "이메일 주소"
+        emailTextField.borderStyle = .roundedRect
+        
+        nickNameTextField.placeholder = "닉네임"
+        nickNameTextField.borderStyle = .roundedRect
         
         passwordTextField.placeholder = "비밀번호"
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.isSecureTextEntry = true
         
-        signInButton.setTitle("로그인", for: .normal)
-        signInButton.backgroundColor = .black
-        signInButton.addTarget(self, action: #selector(signInButtonClicked), for: .touchUpInside)
-        signInButton.snp.makeConstraints { make in
+        passwordConfirmTextField.placeholder = "비밀번호 확인"
+        passwordConfirmTextField.borderStyle = .roundedRect
+        passwordConfirmTextField.isSecureTextEntry = true
+        
+        
+        signUpButton.setTitle("회원가입", for: .normal)
+        signUpButton.backgroundColor = .black
+        signUpButton.addTarget(self, action: #selector(signUpButtonClicked), for: .touchUpInside)
+        signUpButton.snp.makeConstraints { make in
             make.leadingMargin.equalTo(view)
             make.trailingMargin.equalTo(view)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            //make.height.equalTo(view).multipliedBy(0.1)
         }
     }
     
@@ -67,16 +79,18 @@ class SignInViewController: UIViewController{
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func signInButtonClicked(){
+    @objc func signUpButtonClicked(){
+        
         
         //전송할 값
-        let identifier = idTextField.text!
+        let username = nickNameTextField.text!
+        let email = emailTextField.text!
         let password = passwordTextField.text!
-        let param = "identifier=\(identifier)&password=\(password)"
+        let param = "username=\(username)&email=\(email)&password=\(password)"
         let paramData = param.data(using: .utf8)
             
         //URL 객체 정의
-        let url = URL(string: "http://test.monocoding.com:1231/auth/local")
+        let url = URL(string: "http://test.monocoding.com:1231/auth/local/register")
             
         //URLRequest 객체 정의
         var request = URLRequest(url: url!)
@@ -113,6 +127,7 @@ class SignInViewController: UIViewController{
                 navigation.modalPresentationStyle = .fullScreen
                 self.present(navigation, animated: true, completion: nil)
                 
+                
             }catch let e as NSError{
                 print("An error has occured while parsing JSONObject: \(e.localizedDescription)")
             }
@@ -123,6 +138,8 @@ class SignInViewController: UIViewController{
             
      //post 전송
      task.resume()
+        
+
         
     }
     

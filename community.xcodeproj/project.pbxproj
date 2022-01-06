@@ -15,6 +15,14 @@
 		270755E3278339E300BA0350 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 270755E2278339E300BA0350 /* SnapKit */; };
 		270755E6278339F400BA0350 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 270755E5278339F400BA0350 /* RxCocoa */; };
 		270755E8278339F400BA0350 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 270755E7278339F400BA0350 /* RxSwift */; };
+		270755EA27833B5000BA0350 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270755E927833B5000BA0350 /* WelcomeViewController.swift */; };
+		270755EE278347FF00BA0350 /* pinkCat.png in Resources */ = {isa = PBXBuildFile; fileRef = 270755ED278347FE00BA0350 /* pinkCat.png */; };
+		274B89C72785F68A005DFEA9 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89C62785F68A005DFEA9 /* SignUpViewController.swift */; };
+		274B89C92785FA89005DFEA9 /* CommunityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89C82785FA89005DFEA9 /* CommunityListViewController.swift */; };
+		274B89CB2786CF56005DFEA9 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CA2786CF56005DFEA9 /* ContentViewController.swift */; };
+		274B89CD2786D0D9005DFEA9 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CC2786D0D9005DFEA9 /* PostViewController.swift */; };
+		274B89CF2786D3E2005DFEA9 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */; };
+		274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D02786DC6A005DFEA9 /* ServerService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +33,14 @@
 		270755D72783390700BA0350 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		270755D92783390700BA0350 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		270755DF2783398700BA0350 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		270755E927833B5000BA0350 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		270755ED278347FE00BA0350 /* pinkCat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pinkCat.png; path = "../../../Desktop/김성엽/pinkCat.png"; sourceTree = "<group>"; };
+		274B89C62785F68A005DFEA9 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		274B89C82785FA89005DFEA9 /* CommunityListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityListViewController.swift; sourceTree = "<group>"; };
+		274B89CA2786CF56005DFEA9 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		274B89CC2786D0D9005DFEA9 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		274B89D02786DC6A005DFEA9 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,12 +76,20 @@
 		270755CA2783390400BA0350 /* community */ = {
 			isa = PBXGroup;
 			children = (
+				270755ED278347FE00BA0350 /* pinkCat.png */,
 				270755CB2783390400BA0350 /* AppDelegate.swift */,
 				270755CD2783390400BA0350 /* SceneDelegate.swift */,
 				270755D42783390700BA0350 /* Assets.xcassets */,
 				270755D62783390700BA0350 /* LaunchScreen.storyboard */,
 				270755D92783390700BA0350 /* Info.plist */,
+				270755E927833B5000BA0350 /* WelcomeViewController.swift */,
 				270755DF2783398700BA0350 /* SignInViewController.swift */,
+				274B89C62785F68A005DFEA9 /* SignUpViewController.swift */,
+				274B89C82785FA89005DFEA9 /* CommunityListViewController.swift */,
+				274B89CA2786CF56005DFEA9 /* ContentViewController.swift */,
+				274B89CC2786D0D9005DFEA9 /* PostViewController.swift */,
+				274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */,
+				274B89D02786DC6A005DFEA9 /* ServerService.swift */,
 			);
 			path = community;
 			sourceTree = "<group>";
@@ -137,6 +161,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				270755EE278347FF00BA0350 /* pinkCat.png in Resources */,
 				270755D82783390700BA0350 /* LaunchScreen.storyboard in Resources */,
 				270755D52783390700BA0350 /* Assets.xcassets in Resources */,
 			);
@@ -149,9 +174,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				274B89CD2786D0D9005DFEA9 /* PostViewController.swift in Sources */,
 				270755E02783398700BA0350 /* SignInViewController.swift in Sources */,
+				270755EA27833B5000BA0350 /* WelcomeViewController.swift in Sources */,
+				274B89C92785FA89005DFEA9 /* CommunityListViewController.swift in Sources */,
 				270755CC2783390400BA0350 /* AppDelegate.swift in Sources */,
 				270755CE2783390400BA0350 /* SceneDelegate.swift in Sources */,
+				274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */,
+				274B89C72785F68A005DFEA9 /* SignUpViewController.swift in Sources */,
+				274B89CB2786CF56005DFEA9 /* ContentViewController.swift in Sources */,
+				274B89CF2786D3E2005DFEA9 /* CommentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +327,7 @@
 				DEVELOPMENT_TEAM = VJUS985676;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = community/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "커뮤니팅";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -322,6 +355,7 @@
 				DEVELOPMENT_TEAM = VJUS985676;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = community/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "커뮤니팅";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
