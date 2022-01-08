@@ -23,6 +23,7 @@
 		274B89CD2786D0D9005DFEA9 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CC2786D0D9005DFEA9 /* PostViewController.swift */; };
 		274B89CF2786D3E2005DFEA9 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */; };
 		274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D02786DC6A005DFEA9 /* ServerService.swift */; };
+		274B89D3278827D7005DFEA9 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D2278827D7005DFEA9 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		274B89CC2786D0D9005DFEA9 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		274B89D02786DC6A005DFEA9 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
+		274B89D2278827D7005DFEA9 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				274B89CC2786D0D9005DFEA9 /* PostViewController.swift */,
 				274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */,
 				274B89D02786DC6A005DFEA9 /* ServerService.swift */,
+				274B89D2278827D7005DFEA9 /* Model.swift */,
 			);
 			path = community;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 				270755CE2783390400BA0350 /* SceneDelegate.swift in Sources */,
 				274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */,
 				274B89C72785F68A005DFEA9 /* SignUpViewController.swift in Sources */,
+				274B89D3278827D7005DFEA9 /* Model.swift in Sources */,
 				274B89CB2786CF56005DFEA9 /* ContentViewController.swift in Sources */,
 				274B89CF2786D3E2005DFEA9 /* CommentViewController.swift in Sources */,
 			);

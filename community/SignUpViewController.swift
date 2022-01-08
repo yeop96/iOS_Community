@@ -10,6 +10,7 @@ import SnapKit
 
 class SignUpViewController: UIViewController{
     
+    let serverService = ServerService()
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -81,64 +82,27 @@ class SignUpViewController: UIViewController{
     
     @objc func signUpButtonClicked(){
         
-        
-        //전송할 값
         let username = nickNameTextField.text!
         let email = emailTextField.text!
         let password = passwordTextField.text!
-        let param = "username=\(username)&email=\(email)&password=\(password)"
-        let paramData = param.data(using: .utf8)
-            
-        //URL 객체 정의
-        let url = URL(string: "http://test.monocoding.com:1231/auth/local/register")
-            
-        //URLRequest 객체 정의
-        var request = URLRequest(url: url!)
-        request.httpMethod = "POST"
-        request.httpBody = paramData
-            
-        //request.addValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-        //request.setValue(String(paramData!.count), forHTTPHeaderField: "Content-Length")
-            
-            
-        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
-              
-        let task = URLSession.shared.dataTask(with: request) {
-                (data, response, error) in
-                
-            //서버가 응답이 없거나 통신이 실패
-            if let e = error{
-                print("e : \(e.localizedDescription)")
-                return
-            }
-           
-        //응답 처리 로직
-        DispatchQueue.main.async {
-                
-            do{
-                let object = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
-                
-                guard let jsonObject = object else { return }
-                guard let result = jsonObject["user"] else { return }
-                
-                print(result)
-                
-                let navigation = UINavigationController(rootViewController: CommunityListViewController())
-                navigation.modalPresentationStyle = .fullScreen
-                self.present(navigation, animated: true, completion: nil)
-                
-                
-            }catch let e as NSError{
-                print("An error has occured while parsing JSONObject: \(e.localizedDescription)")
-            }
-
-        }
-     
-     }//task - end
-            
-     //post 전송
-     task.resume()
         
+        serverService.requestSignUp(username: username, email: email, password: password) { authData in
+            
+            guard let authData = authData else { return }
+            
+            UserDefaults.standard.set(authData.jwt, forKey: "jwt")
+            UserDefaults.standard.set(authData.user.id, forKey: "id")
+            UserDefaults.standard.set(authData.user.username, forKey: "username")
+            UserDefaults.standard.set(authData.user.email, forKey: "email")
+            UserDefaults.standard.set(password, forKey: "password")
+            
+            DispatchQueue.main.async {
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+                let nav = UINavigationController(rootViewController: CommunityListViewController())
+                windowScene.windows.first?.rootViewController = nav
+                windowScene.windows.first?.makeKeyAndVisible()
+            }
+        }
 
         
     }
