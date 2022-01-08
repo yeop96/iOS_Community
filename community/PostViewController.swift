@@ -9,8 +9,11 @@ import UIKit
 import SnapKit
 
 class PostViewController: UIViewController{
+    let serverService = ServerService()
     let borderView = UIView()
     let postTextView = UITextView()
+    let dismissNotification: Notification.Name = Notification.Name("dismissNotification")
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +44,13 @@ class PostViewController: UIViewController{
     }
     
     @objc func saveButtonClicked(){
-        dismiss(animated: true)
+        guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
+        serverService.requestPost(jwt: jwt, text: postTextView.text) { data in
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                self.dismiss(animated: true)
+            }
+        }
     }
     
     @objc func dismissAction(){

@@ -13,6 +13,8 @@ class CommunityListViewController: UIViewController{
     let serverService = ServerService()
     var posts = [Post]()
     let tableView = UITableView()
+    let dismissNotification: Notification.Name = Notification.Name("dismissNotification")
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +34,16 @@ class CommunityListViewController: UIViewController{
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(settingButtonClicked))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(postButtonClicked))
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.dismissNotification(_:)), name: dismissNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+    }
+    
+    @objc func dismissNotification(_ noti: Notification) {
+        getPost()
     }
     
     @objc func settingButtonClicked(){

@@ -112,6 +112,45 @@ class ServerService{
         }
     }
     
+    func requestPost(jwt: String, text: String, _ completion: @escaping (Posts?) -> Void) {
+        
+        let param = "text=\(text)"
+        let paramData = param.data(using: .utf8)
+        
+        //URL 객체 정의
+        let url = URL(string: "http://test.monocoding.com:1231/posts")
+        
+        //URLRequest 객체 정의
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.httpBody = paramData
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        
+        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            //서버가 응답이 없거나 통신이 실패
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(Posts.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
+
+    }
+    
     
     
     
