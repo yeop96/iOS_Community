@@ -99,10 +99,17 @@ extension CommunityListViewController: UITableViewDelegate, UITableViewDataSourc
         cell.nicknameLabel.text = post.user.username
         cell.contentLabel.text = post.text
         cell.dateLabel.text = post.created_at
-        cell.commentLabel.text = "댓글"
+        cell.commentLabel.text = post.comments.count == 0 ? "댓글쓰기" : "댓글 \(post.comments.count)"
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ContentViewController()
+        vc.postContent = posts[indexPath.row]
+        vc.postComments = posts[indexPath.row].comments
+        print(posts[indexPath.row].comments)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
 }
 
