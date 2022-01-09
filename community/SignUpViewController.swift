@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SignUpViewController: UIViewController{
+class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
     
     let serverService = ServerService()
     let stackView: UIStackView = {
@@ -24,10 +24,12 @@ class SignUpViewController: UIViewController{
     let passwordTextField = UITextField()
     let passwordConfirmTextField = UITextField()
     let signUpButton = UIButton()
+    let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
         view.addSubview(stackView)
         
         [emailTextField, nickNameTextField, passwordTextField, passwordConfirmTextField,].forEach {
@@ -38,6 +40,11 @@ class SignUpViewController: UIViewController{
         title = "회원가입"
         setUp()
         
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        self.view.endEditing(true)
+        return true
     }
     
     func setUp(){

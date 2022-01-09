@@ -106,8 +106,7 @@ extension CommunityListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ContentViewController()
         vc.postContent = posts[indexPath.row]
-        vc.postComments = posts[indexPath.row].comments
-        print(posts[indexPath.row].comments)
+        //print(posts[indexPath.row].comments)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

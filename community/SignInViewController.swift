@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SignInViewController: UIViewController{
+class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
     
     let serverService = ServerService()
     let stackView: UIStackView = {
@@ -19,14 +19,16 @@ class SignInViewController: UIViewController{
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
     let idTextField = UITextField()
     let passwordTextField = UITextField()
     let signInButton = UIButton()
+    let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
         view.backgroundColor = .white
         title = "로그인"
         
@@ -36,6 +38,11 @@ class SignInViewController: UIViewController{
         view.addSubview(signInButton)
         
         setUp()
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        self.view.endEditing(true)
+        return true
     }
     
     func setUp(){

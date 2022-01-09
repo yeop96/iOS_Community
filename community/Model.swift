@@ -29,7 +29,6 @@ struct Post: Codable {
     let comments: Comments
 }
 
-
 typealias Comments = [Comment]
 
 struct Comment: Codable{
@@ -37,6 +36,16 @@ struct Comment: Codable{
     let comment: String
     let user: Int
     let post: Int
+    let created_at: String
+    let updated_at: String
+}
+
+typealias DetailComments = [DetailComment]
+
+struct DetailComment: Codable{
+    let id: Int
+    let comment: String
+    let user: User
     let created_at: String
     let updated_at: String
 }
