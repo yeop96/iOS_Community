@@ -50,7 +50,10 @@ class CommunityListViewController: UIViewController{
         let alert = UIAlertController(title: "설정", message: nil, preferredStyle: .actionSheet)
         
         let changePassword = UIAlertAction(title: "비밀번호 변경", style: .default) { (action) in
-            
+            let vc = PasswordViewController()
+            let navigation = UINavigationController(rootViewController: vc)
+            navigation.modalPresentationStyle = .fullScreen
+            self.present(navigation, animated: true, completion: nil)
         }
         let logout = UIAlertAction(title: "로그아웃", style: .default){ (action) in
             DispatchQueue.main.async {

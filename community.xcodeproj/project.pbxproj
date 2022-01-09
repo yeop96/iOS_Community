@@ -24,6 +24,7 @@
 		274B89CF2786D3E2005DFEA9 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */; };
 		274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D02786DC6A005DFEA9 /* ServerService.swift */; };
 		274B89D3278827D7005DFEA9 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D2278827D7005DFEA9 /* Model.swift */; };
+		274B89D5278ADD29005DFEA9 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D4278ADD28005DFEA9 /* PasswordViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		274B89CE2786D3E2005DFEA9 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		274B89D02786DC6A005DFEA9 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
 		274B89D2278827D7005DFEA9 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		274B89D4278ADD28005DFEA9 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				270755E927833B5000BA0350 /* WelcomeViewController.swift */,
 				270755DF2783398700BA0350 /* SignInViewController.swift */,
 				274B89C62785F68A005DFEA9 /* SignUpViewController.swift */,
+				274B89D4278ADD28005DFEA9 /* PasswordViewController.swift */,
 				274B89C82785FA89005DFEA9 /* CommunityListViewController.swift */,
 				274B89CA2786CF56005DFEA9 /* ContentViewController.swift */,
 				274B89CC2786D0D9005DFEA9 /* PostViewController.swift */,
@@ -182,6 +185,7 @@
 				270755EA27833B5000BA0350 /* WelcomeViewController.swift in Sources */,
 				274B89C92785FA89005DFEA9 /* CommunityListViewController.swift in Sources */,
 				270755CC2783390400BA0350 /* AppDelegate.swift in Sources */,
+				274B89D5278ADD29005DFEA9 /* PasswordViewController.swift in Sources */,
 				270755CE2783390400BA0350 /* SceneDelegate.swift in Sources */,
 				274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */,
 				274B89C72785F68A005DFEA9 /* SignUpViewController.swift in Sources */,

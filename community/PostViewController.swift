@@ -14,7 +14,6 @@ class PostViewController: UIViewController{
     let postTextView = UITextView()
     let dismissNotification: Notification.Name = Notification.Name("dismissNotification")
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "포스팅"

@@ -86,6 +86,44 @@ class ServerService{
         
     }
     
+    func requestChangePassword(jwt: String, currentPassword: String, newPassword: String, confirmNewPassword: String, _ completion: @escaping (User?) -> Void) {
+        
+        let param = "currentPassword=\(currentPassword)&newPassword=\(newPassword)&confirmNewPassword=\(confirmNewPassword)"
+        let paramData = param.data(using: .utf8)
+        
+        //URL 객체 정의
+        let url = URL(string: "http://test.monocoding.com:1231/custom/change-password")
+        
+        //URLRequest 객체 정의
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.httpBody = paramData
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        
+        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            //서버가 응답이 없거나 통신이 실패
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(User.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
+    }
+    
     func requestGetPost(jwt: String, _ completion: @escaping (Posts?) -> Void) {
         if let url = URL(string: "http://test.monocoding.com:1231/posts?_sort=created_at:desc"){
             
@@ -157,7 +195,6 @@ class ServerService{
             var request = URLRequest.init(url: url)
             request.httpMethod = "GET"
             request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
-            print(jwt)
             
             URLSession.shared.dataTask(with: request){ (data, response, error) in
                
