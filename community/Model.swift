@@ -29,6 +29,7 @@ struct Post: Codable {
     let comments: Comments
 }
 
+
 typealias Comments = [Comment]
 
 struct Comment: Codable{

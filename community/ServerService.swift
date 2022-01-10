@@ -150,6 +150,32 @@ class ServerService{
         }
     }
     
+    func requestGetDetailPost(jwt: String, postId: String, _ completion: @escaping (Post?) -> Void) {
+        if let url = URL(string: "http://test.monocoding.com:1231/posts/\(postId)"){
+            
+            var request = URLRequest.init(url: url)
+            request.httpMethod = "GET"
+            request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+            
+            URLSession.shared.dataTask(with: request){ (data, response, error) in
+               
+                if let e = error{
+                    print("e : \(e.localizedDescription)")
+                    return
+                }
+                
+                if let data = data, let postsData = try?
+                    JSONDecoder().decode(Post.self, from: data){
+                    completion(postsData)
+                    return
+                }
+                completion(nil)
+                
+            }.resume() //URLSession - end
+            
+        }
+    }
+    
     func requestPost(jwt: String, text: String, _ completion: @escaping (Posts?) -> Void) {
         
         let param = "text=\(text)"
@@ -187,6 +213,73 @@ class ServerService{
         //post 전송
         task.resume()
 
+    }
+    
+    func requestPutPost(jwt: String, text: String, postId: String, _ completion: @escaping (Post?) -> Void) {
+        
+        let param = "text=\(text)"
+        let paramData = param.data(using: .utf8)
+        
+        let url = URL(string: "http://test.monocoding.com:1231/posts/\(postId)")
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "PUT"
+        request.httpBody = paramData
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(Post.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
+
+    }
+    
+    func requestDeletePost(jwt: String, postId: String, _ completion: @escaping (Post?) -> Void) {
+        
+        let url = URL(string: "http://test.monocoding.com:1231/posts/\(postId)")
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "DELETE"
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            //서버가 응답이 없거나 통신이 실패
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(Post.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
     }
     
     func requestGetComment(jwt: String, post: String, _ completion: @escaping (DetailComments?) -> Void) {
@@ -255,7 +348,81 @@ class ServerService{
     }
     
     
+    func requestPutComment(jwt: String, comment: String, post: String, commentId: String, _ completion: @escaping (DetailComment?) -> Void) {
+        
+        let param = "comment=\(comment)&post=\(post)"
+        let paramData = param.data(using: .utf8)
+        
+        //URL 객체 정의
+        let url = URL(string: "http://test.monocoding.com:1231/comments/\(commentId)")
+        
+        //URLRequest 객체 정의
+        var request = URLRequest(url: url!)
+        request.httpMethod = "PUT"
+        request.httpBody = paramData
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            //서버가 응답이 없거나 통신이 실패
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(DetailComment.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
+
+    }
     
+    func requestDeleteComment(jwt: String, commentId: String, _ completion: @escaping (DetailComment?) -> Void) {
+        
+        //URL 객체 정의
+        let url = URL(string: "http://test.monocoding.com:1231/comments/\(commentId)")
+        
+        //URLRequest 객체 정의
+        var request = URLRequest(url: url!)
+        request.httpMethod = "DELETE"
+        request.addValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            //서버가 응답이 없거나 통신이 실패
+            if let e = error{
+                print("e : \(e.localizedDescription)")
+                return
+            }
+            
+            if let data = data, let postsData = try?
+                JSONDecoder().decode(DetailComment.self, from: data){
+                completion(postsData)
+                return
+            }
+            completion(nil)
+            
+            
+        }//task - end
+        
+        //post 전송
+        task.resume()
+
+    }
     
     
 }

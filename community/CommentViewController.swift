@@ -11,6 +11,8 @@ import SnapKit
 class CommentViewController: UIViewController{
     let serverService = ServerService()
     var postContent: Post?
+    var editBool = false
+    var editComment: DetailComment?
     let borderView = UIView()
     let commentTextView = UITextView()
     let commentNotification: Notification.Name = Notification.Name("commentNotification")
@@ -22,7 +24,6 @@ class CommentViewController: UIViewController{
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(saveButtonClicked))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissAction))
-        
         setUp()
     }
     func setUp(){

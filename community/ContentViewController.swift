@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import NotificationBannerSwift
 
 class ContentViewController: UIViewController{
     
@@ -16,6 +17,7 @@ class ContentViewController: UIViewController{
     var postContent: Post?
     var postComments: DetailComments = []
     let commentNotification: Notification.Name = Notification.Name("commentNotification")
+    let dismissNotification: Notification.Name = Notification.Name("dismissNotification")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +55,7 @@ class ContentViewController: UIViewController{
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(backButtonClicked))
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.commentNotification(_:)), name: commentNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.dismissNotification(_:)), name: dismissNotification, object: nil)
         
     }
     
@@ -64,6 +67,9 @@ class ContentViewController: UIViewController{
     @objc func commentNotification(_ noti: Notification) {
         getComment()
     }
+    @objc func dismissNotification(_ noti: Notification) {
+        getDetailPost()
+    }
     
     @objc func commentButtonClicked(){
         let vc = CommentViewController()
@@ -74,12 +80,62 @@ class ContentViewController: UIViewController{
     }
     
     @objc func moreButtonClicked(){
-        dismiss(animated: true)
+        guard let userEmail = UserDefaults.standard.string(forKey: "email") else { return }
+        guard let postContent = postContent else { return }
+
+        if postContent.user.email != userEmail{
+            let banner = NotificationBanner(subtitle: "접근 권한이 없는 포스팅입니다.", style: .success)
+            banner.titleLabel?.textColor = .label
+            banner.duration = 0.5
+            banner.show(bannerPosition: .bottom)
+            return
+        }
+        
+        guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
+        let alert = UIAlertController(title: "설정", message: nil, preferredStyle: .actionSheet)
+        
+        let putPost = UIAlertAction(title: "포스팅 수정", style: .default) { (action) in
+            let vc = PostViewController()
+            vc.editBool = true
+            vc.editPost = postContent
+            let navigation = UINavigationController(rootViewController: vc)
+            navigation.modalPresentationStyle = .fullScreen
+            self.present(navigation, animated: true, completion: nil)
+        }
+        let deletePost = UIAlertAction(title: "포스팅 삭제", style: .default){ (action) in
+            self.serverService.requestDeletePost(jwt: jwt, postId: String(postContent.id)) { data in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                    let banner = NotificationBanner(subtitle: "포스팅이 삭제되었습니다.", style: .success)
+                    banner.titleLabel?.textColor = .label
+                    banner.duration = 0.5
+                    banner.show()
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+        
+        let noAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(putPost)
+        alert.addAction(deletePost)
+        alert.addAction(noAction)
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func backButtonClicked(){
 
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func getDetailPost(){
+        guard let postContent = postContent else { return }
+        guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
+        serverService.requestGetDetailPost(jwt: jwt, postId: String(postContent.id)) { data in
+            self.postContent = data
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func getComment(){
@@ -92,6 +148,7 @@ class ContentViewController: UIViewController{
             }
         }
     }
+    
     
 }
 
@@ -121,13 +178,63 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
             cell.selectionStyle = .none
             cell.nickNameLabel.text = comment.user.username
             cell.commentLabel.text = comment.comment
-            //cell.userButton.addTarget(self, action: #selector(commentUserButtonClicked), for: .touchUpInside)
+            
+            cell.userButton.addTarget(self, action: #selector(userButtonClicked(_:)), for: .touchUpInside)
+            cell.userButton.tag = indexPath.row
+
+            /*
+            cell.setButtonAction = { [unowned self] in
+                
+                print("???")
+                guard let userEmail = UserDefaults.standard.string(forKey: "email") else { return }
+
+                if comment.user.email != userEmail{
+                    let banner = NotificationBanner(subtitle: "접근 권한이 없는 댓글입니다.", style: .success)
+                    banner.titleLabel?.textColor = .label
+                    banner.duration = 0.5
+                    banner.show(bannerPosition: .bottom)
+                    return
+                }
+                
+                guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
+                let alert = UIAlertController(title: "설정", message: nil, preferredStyle: .actionSheet)
+                
+                let putComment = UIAlertAction(title: "댓글 수정", style: .default) { (action) in
+                    let vc = CommentViewController()
+                    vc.editBool = true
+                    vc.editComment = comment
+                    let navigation = UINavigationController(rootViewController: vc)
+                    navigation.modalPresentationStyle = .fullScreen
+                    self.present(navigation, animated: true, completion: nil)
+                }
+                let deleteComment = UIAlertAction(title: "댓글 삭제", style: .default){ (action) in
+                    self.serverService.requestDeleteComment(jwt: jwt, commentId: String(comment.id)) { commentData in
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                            let banner = NotificationBanner(subtitle: "댓글이 삭제되었습니다.", style: .success)
+                            banner.titleLabel?.textColor = .label
+                            banner.duration = 0.5
+                            banner.show()
+                            //댓글 리로딩
+                        }
+                    }
+                }
+                
+                let noAction = UIAlertAction(title: "취소", style: .cancel)
+                alert.addAction(putComment)
+                alert.addAction(deleteComment)
+                alert.addAction(noAction)
+                present(alert, animated: true, completion: nil)
+            }
+            */
             return cell
         }
         
     }
     
-    
+    @objc func userButtonClicked(_ sender: UIButton){
+        print("?")
+    }
     
 }
 
@@ -237,6 +344,7 @@ class TableViewContentDetailCell: UITableViewCell{
 }
 
 class TableViewCommentCell: UITableViewCell{
+
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -277,12 +385,14 @@ class TableViewCommentCell: UITableViewCell{
         commentLabel.textAlignment = .left
     }
     
+    
     override class func awakeFromNib() {
         super.awakeFromNib()
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        isUserInteractionEnabled = true
         configureUI()
     }
     

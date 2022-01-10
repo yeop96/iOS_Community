@@ -13,10 +13,12 @@ class PostViewController: UIViewController{
     let borderView = UIView()
     let postTextView = UITextView()
     let dismissNotification: Notification.Name = Notification.Name("dismissNotification")
+    var editBool = false
+    var editPost: Post?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "포스팅"
+        title = editBool ? "포스팅 수정" : "포스팅"
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(saveButtonClicked))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissAction))
@@ -37,6 +39,9 @@ class PostViewController: UIViewController{
             make.trailingMargin.equalToSuperview().inset(10)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
+        if let editPost = editPost {
+            postTextView.text = editPost.text
+        }
         postTextView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(20)
         }
@@ -44,12 +49,24 @@ class PostViewController: UIViewController{
     
     @objc func saveButtonClicked(){
         guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
-        serverService.requestPost(jwt: jwt, text: postTextView.text) { data in
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
-                self.dismiss(animated: true)
+        
+        if editBool{
+            guard let editPost = editPost else { return }
+            serverService.requestPutPost(jwt: jwt, text: postTextView.text, postId: String(editPost.id)) { post in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                    self.dismiss(animated: true)
+                }
+            }
+        } else{
+            serverService.requestPost(jwt: jwt, text: postTextView.text) { data in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                    self.dismiss(animated: true)
+                }
             }
         }
+        
     }
     
     @objc func dismissAction(){
