@@ -25,8 +25,8 @@
 		274B89D12786DC6A005DFEA9 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D02786DC6A005DFEA9 /* ServerService.swift */; };
 		274B89D3278827D7005DFEA9 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D2278827D7005DFEA9 /* Model.swift */; };
 		274B89D5278ADD29005DFEA9 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274B89D4278ADD28005DFEA9 /* PasswordViewController.swift */; };
-		274B89D8278C0EA8005DFEA9 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 274B89D7278C0EA8005DFEA9 /* IQKeyboardManagerSwift */; };
-		274B89DB278C17B6005DFEA9 /* NotificationBannerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 274B89DA278C17B6005DFEA9 /* NotificationBannerSwift */; };
+		276BC2D5278DE78200B0DCA2 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 276BC2D4278DE78200B0DCA2 /* IQKeyboardManagerSwift */; };
+		276BC2D8278DE79500B0DCA2 /* NotificationBannerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 276BC2D7278DE79500B0DCA2 /* NotificationBannerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,9 +55,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				270755E8278339F400BA0350 /* RxSwift in Frameworks */,
-				274B89D8278C0EA8005DFEA9 /* IQKeyboardManagerSwift in Frameworks */,
+				276BC2D5278DE78200B0DCA2 /* IQKeyboardManagerSwift in Frameworks */,
 				270755E6278339F400BA0350 /* RxCocoa in Frameworks */,
-				274B89DB278C17B6005DFEA9 /* NotificationBannerSwift in Frameworks */,
+				276BC2D8278DE79500B0DCA2 /* NotificationBannerSwift in Frameworks */,
 				270755E3278339E300BA0350 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -124,8 +124,8 @@
 				270755E2278339E300BA0350 /* SnapKit */,
 				270755E5278339F400BA0350 /* RxCocoa */,
 				270755E7278339F400BA0350 /* RxSwift */,
-				274B89D7278C0EA8005DFEA9 /* IQKeyboardManagerSwift */,
-				274B89DA278C17B6005DFEA9 /* NotificationBannerSwift */,
+				276BC2D4278DE78200B0DCA2 /* IQKeyboardManagerSwift */,
+				276BC2D7278DE79500B0DCA2 /* NotificationBannerSwift */,
 			);
 			productName = community;
 			productReference = 270755C82783390300BA0350 /* community.app */;
@@ -158,8 +158,8 @@
 			packageReferences = (
 				270755E1278339E300BA0350 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				270755E4278339F400BA0350 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				274B89D6278C0EA8005DFEA9 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				274B89D9278C17B6005DFEA9 /* XCRemoteSwiftPackageReference "NotificationBanner" */,
+				276BC2D3278DE78200B0DCA2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				276BC2D6278DE79500B0DCA2 /* XCRemoteSwiftPackageReference "NotificationBanner" */,
 			);
 			productRefGroup = 270755C92783390300BA0350 /* Products */;
 			projectDirPath = "";
@@ -431,7 +431,7 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		274B89D6278C0EA8005DFEA9 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+		276BC2D3278DE78200B0DCA2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
 			requirement = {
@@ -439,7 +439,7 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		274B89D9278C17B6005DFEA9 /* XCRemoteSwiftPackageReference "NotificationBanner" */ = {
+		276BC2D6278DE79500B0DCA2 /* XCRemoteSwiftPackageReference "NotificationBanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Daltron/NotificationBanner.git";
 			requirement = {
@@ -465,14 +465,14 @@
 			package = 270755E4278339F400BA0350 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
 		};
-		274B89D7278C0EA8005DFEA9 /* IQKeyboardManagerSwift */ = {
+		276BC2D4278DE78200B0DCA2 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 274B89D6278C0EA8005DFEA9 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			package = 276BC2D3278DE78200B0DCA2 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
 		};
-		274B89DA278C17B6005DFEA9 /* NotificationBannerSwift */ = {
+		276BC2D7278DE79500B0DCA2 /* NotificationBannerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 274B89D9278C17B6005DFEA9 /* XCRemoteSwiftPackageReference "NotificationBanner" */;
+			package = 276BC2D6278DE79500B0DCA2 /* XCRemoteSwiftPackageReference "NotificationBanner" */;
 			productName = NotificationBannerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

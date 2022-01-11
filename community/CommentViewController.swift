@@ -20,7 +20,7 @@ class CommentViewController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "포스팅"
+        title = editBool ? "댓글 수정" : "댓글"
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(saveButtonClicked))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissAction))
@@ -37,6 +37,9 @@ class CommentViewController: UIViewController{
             make.leadingMargin.trailingMargin.equalToSuperview().inset(10)
             make.height.equalToSuperview().multipliedBy(0.5)
         }
+        if editBool{
+            commentTextView.text = editComment?.comment
+        }
         commentTextView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(20)
         }
@@ -46,12 +49,27 @@ class CommentViewController: UIViewController{
         guard let postContent = postContent else { return }
         guard let jwt = UserDefaults.standard.string(forKey: "jwt") else { return }
         
-        serverService.requestPostComment(jwt: jwt, comment: commentTextView.text, post: String(postContent.id)) { data in
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: self.commentNotification, object: nil, userInfo: nil)
-                self.dismiss(animated: true)
+        if editBool{
+            guard let editComment = editComment else { return }
+            print(postContent)
+            print(editComment)
+            print(jwt)
+            serverService.requestPutComment(jwt: jwt, comment: commentTextView.text, post: String(postContent.id), commentId: String(editComment.id)) { data in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: self.commentNotification, object: nil, userInfo: nil)
+                    self.dismiss(animated: true)
+                }
+            }
+        } else{
+            serverService.requestPostComment(jwt: jwt, comment: commentTextView.text, post: String(postContent.id)) { data in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: self.commentNotification, object: nil, userInfo: nil)
+                    self.dismiss(animated: true)
+                }
             }
         }
+        
+        
     }
     
     

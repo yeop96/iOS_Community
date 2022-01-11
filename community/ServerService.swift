@@ -375,6 +375,7 @@ class ServerService{
             
             if let data = data, let postsData = try?
                 JSONDecoder().decode(DetailComment.self, from: data){
+                print(data)
                 completion(postsData)
                 return
             }

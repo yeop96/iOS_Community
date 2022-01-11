@@ -66,6 +66,7 @@ class ContentViewController: UIViewController{
     
     @objc func commentNotification(_ noti: Notification) {
         getComment()
+        tableView.reloadData()
     }
     @objc func dismissNotification(_ noti: Notification) {
         getDetailPost()
@@ -123,7 +124,7 @@ class ContentViewController: UIViewController{
     }
     
     @objc func backButtonClicked(){
-
+        NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -149,7 +150,6 @@ class ContentViewController: UIViewController{
         }
     }
     
-    
 }
 
 extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
@@ -166,26 +166,18 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
         if indexPath.section == 0{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewContentDetailCell") as? TableViewContentDetailCell else { return UITableViewCell() }
             guard let post = postContent else { return UITableViewCell() }
-            cell.selectionStyle = .none
             cell.nicknameLabel.text = post.user.username
             cell.dateLabel.text = post.created_at
             cell.contentLabel.text = post.text
             cell.commentLabel.text = post.comments.count == 0 ? "댓글" : "댓글 \(postComments.count)"
             return cell
-        } else{
+        } else if indexPath.section == 1{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCommentCell") as? TableViewCommentCell else { return UITableViewCell() }
             let comment = postComments[indexPath.row]
-            cell.selectionStyle = .none
             cell.nickNameLabel.text = comment.user.username
             cell.commentLabel.text = comment.comment
             
-            cell.userButton.addTarget(self, action: #selector(userButtonClicked(_:)), for: .touchUpInside)
-            cell.userButton.tag = indexPath.row
-
-            /*
             cell.setButtonAction = { [unowned self] in
-                
-                print("???")
                 guard let userEmail = UserDefaults.standard.string(forKey: "email") else { return }
 
                 if comment.user.email != userEmail{
@@ -202,6 +194,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
                 let putComment = UIAlertAction(title: "댓글 수정", style: .default) { (action) in
                     let vc = CommentViewController()
                     vc.editBool = true
+                    vc.postContent = postContent
                     vc.editComment = comment
                     let navigation = UINavigationController(rootViewController: vc)
                     navigation.modalPresentationStyle = .fullScreen
@@ -215,7 +208,8 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
                             banner.titleLabel?.textColor = .label
                             banner.duration = 0.5
                             banner.show()
-                            //댓글 리로딩
+                            getComment()
+                            tableView.reloadData()
                         }
                     }
                 }
@@ -226,20 +220,20 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
                 alert.addAction(noAction)
                 present(alert, animated: true, completion: nil)
             }
-            */
+            
             return cell
         }
         
+        return UITableViewCell()
     }
     
-    @objc func userButtonClicked(_ sender: UIButton){
-        print("?")
-    }
     
 }
 
+
+
 class TableViewContentDetailCell: UITableViewCell{
-    
+
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -327,6 +321,7 @@ class TableViewContentDetailCell: UITableViewCell{
         commentLabel.textColor = .darkGray
         commentLabel.textAlignment = .left
         
+        
     }
     
     override class func awakeFromNib() {
@@ -341,14 +336,18 @@ class TableViewContentDetailCell: UITableViewCell{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
 
+
+
+
 class TableViewCommentCell: UITableViewCell{
+    var setButtonAction : (() -> ())?
 
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .fill
         stackView.spacing = 5
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -357,9 +356,7 @@ class TableViewCommentCell: UITableViewCell{
     let userStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .fill
-        stackView.spacing = 10
-        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.distribution = .equalSpacing
         return stackView
     }()
     let nickNameLabel = UILabel()
@@ -367,23 +364,31 @@ class TableViewCommentCell: UITableViewCell{
     let commentLabel = UILabel()
     
     func configureUI(){
-        addSubview(stackView)
+        contentView.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        stackView.addArrangedSubview(userStackView)
         userStackView.addArrangedSubview(nickNameLabel)
         userStackView.addArrangedSubview(userButton)
-        stackView.addArrangedSubview(userStackView)
         stackView.addArrangedSubview(commentLabel)
+        
         
         nickNameLabel.font = .boldSystemFont(ofSize: 15)
         nickNameLabel.textAlignment = .left
-        
+
         userButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        userButton.addTarget(self, action: #selector(setButtonClicked), for: .touchUpInside)
+
         
         commentLabel.numberOfLines = 0
         commentLabel.textAlignment = .left
     }
+    
+    @objc func setButtonClicked() {
+        setButtonAction?()
+    }
+
     
     
     override class func awakeFromNib() {
@@ -401,4 +406,5 @@ class TableViewCommentCell: UITableViewCell{
     }
     
 }
+
 
