@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import NotificationBannerSwift
 
 class CommentViewController: UIViewController{
     let serverService = ServerService()
@@ -21,7 +22,7 @@ class CommentViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         title = editBool ? "댓글 수정" : "댓글"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(saveButtonClicked))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissAction))
         setUp()

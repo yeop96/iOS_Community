@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import NotificationBannerSwift
 
 class PostViewController: UIViewController{
     let serverService = ServerService()
@@ -19,7 +20,7 @@ class PostViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         title = editBool ? "포스팅 수정" : "포스팅"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(saveButtonClicked))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissAction))
         

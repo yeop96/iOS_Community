@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import NotificationBannerSwift
 
 class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
     
@@ -19,6 +20,7 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
         stackView.distribution = .fillEqually
         return stackView
     }()
+    let logoImageView = UIImageView()
     let emailTextField = UITextField()
     let nickNameTextField = UITextField()
     let passwordTextField = UITextField()
@@ -30,13 +32,12 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
         super.viewDidLoad()
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
+        view.addSubview(logoImageView)
         view.addSubview(stackView)
-        
         [emailTextField, nickNameTextField, passwordTextField, passwordConfirmTextField,].forEach {
             stackView.addArrangedSubview($0)
         }
         view.addSubview(signUpButton)
-        view.backgroundColor = .white
         title = "회원가입"
         setUp()
         
@@ -48,13 +49,23 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
     }
     
     func setUp(){
+        view.backgroundColor = .systemBackground
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(backButtonClicked))
         
+        logoImageView.image = UIImage(named: "pinkCat.png")
+        logoImageView.backgroundColor = .clear
+        logoImageView.contentMode = .scaleToFill
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(100)
+            make.width.equalTo(100)
+        }
+        
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.equalTo(20)
-            make.trailing.equalTo(-20)
-            make.height.equalTo(400)
+            make.top.equalTo(logoImageView.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
         }
         
         emailTextField.placeholder = "이메일 주소"
@@ -71,15 +82,16 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
         passwordConfirmTextField.borderStyle = .roundedRect
         passwordConfirmTextField.isSecureTextEntry = true
         
-        
         signUpButton.setTitle("회원가입", for: .normal)
-        signUpButton.backgroundColor = .black
+        signUpButton.setTitleColor(.systemBackground, for: .normal)
+        signUpButton.backgroundColor = .label
+        signUpButton.layer.cornerRadius = 10
         signUpButton.addTarget(self, action: #selector(signUpButtonClicked), for: .touchUpInside)
         signUpButton.snp.makeConstraints { make in
-            make.leadingMargin.equalTo(view)
-            make.trailingMargin.equalTo(view)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            //make.height.equalTo(view).multipliedBy(0.1)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            make.height.equalTo(50)
         }
     }
     
@@ -93,6 +105,14 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
         let email = emailTextField.text!
         let password = passwordTextField.text!
         
+        if passwordTextField.text != passwordConfirmTextField.text{
+            let banner = NotificationBanner(subtitle: "비밀번호 확인이 다릅니다.", style: .success)
+            banner.titleLabel?.textColor = .label
+            banner.duration = 1
+            banner.show()
+            return
+        }
+        
         serverService.requestSignUp(username: username, email: email, password: password) { authData in
             
             guard let authData = authData else { return }
@@ -102,6 +122,7 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate{
             UserDefaults.standard.set(authData.user.username, forKey: "username")
             UserDefaults.standard.set(authData.user.email, forKey: "email")
             UserDefaults.standard.set(password, forKey: "password")
+            
             
             DispatchQueue.main.async {
                 guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }

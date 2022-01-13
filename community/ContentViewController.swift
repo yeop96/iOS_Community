@@ -29,10 +29,10 @@ class ContentViewController: UIViewController{
         view.addSubview(commentButton)
         view.addSubview(tableView)
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         commentButton.setTitle("댓글쓰기", for: .normal)
-        commentButton.setTitleColor(.black, for: .normal)
+        commentButton.setTitleColor(.label, for: .normal)
         commentButton.backgroundColor = .clear
         commentButton.layer.cornerRadius = 10
         commentButton.addTarget(self, action: #selector(commentButtonClicked), for: .touchUpInside)
@@ -41,12 +41,11 @@ class ContentViewController: UIViewController{
             make.leadingMargin.trailingMargin.equalToSuperview().inset(20)
         }
         
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .none
         tableView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(commentButton.snp.top)
-            make.leadingMargin.trailingMargin.equalToSuperview().inset(20)
         }
         
         
@@ -104,16 +103,26 @@ class ContentViewController: UIViewController{
             self.present(navigation, animated: true, completion: nil)
         }
         let deletePost = UIAlertAction(title: "포스팅 삭제", style: .default){ (action) in
-            self.serverService.requestDeletePost(jwt: jwt, postId: String(postContent.id)) { data in
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
-                    let banner = NotificationBanner(subtitle: "포스팅이 삭제되었습니다.", style: .success)
-                    banner.titleLabel?.textColor = .label
-                    banner.duration = 0.5
-                    banner.show()
-                    self.navigationController?.popViewController(animated: true)
+            let alert = UIAlertController(title: "포스팅 삭제", message: "포스팅을 삭제하나요?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "예", style: .default){ (action) in
+                self.serverService.requestDeletePost(jwt: jwt, postId: String(postContent.id)) { data in
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
+                        let banner = NotificationBanner(subtitle: "포스팅이 삭제되었습니다.", style: .success)
+                        banner.titleLabel?.textColor = .label
+                        banner.duration = 0.5
+                        banner.show()
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
+            let noAction = UIAlertAction(title: "아니오", style: .cancel){ (action) in
+                return
+            }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            self.present(alert, animated: true, completion: nil)
+            
         }
         
         let noAction = UIAlertAction(title: "취소", style: .cancel)
@@ -167,7 +176,8 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewContentDetailCell") as? TableViewContentDetailCell else { return UITableViewCell() }
             guard let post = postContent else { return UITableViewCell() }
             cell.nicknameLabel.text = post.user.username
-            cell.dateLabel.text = post.created_at
+            let creatAt = post.created_at.split(separator: "T")
+            cell.dateLabel.text = creatAt[0].replacingOccurrences(of: "-", with: "/")
             cell.contentLabel.text = post.text
             cell.commentLabel.text = post.comments.count == 0 ? "댓글" : "댓글 \(postComments.count)"
             return cell
@@ -201,6 +211,7 @@ extension ContentViewController: UITableViewDelegate, UITableViewDataSource{
                     self.present(navigation, animated: true, completion: nil)
                 }
                 let deleteComment = UIAlertAction(title: "댓글 삭제", style: .default){ (action) in
+                    
                     self.serverService.requestDeleteComment(jwt: jwt, commentId: String(comment.id)) { commentData in
                         DispatchQueue.main.async {
                             NotificationCenter.default.post(name: self.dismissNotification, object: nil, userInfo: nil)
@@ -239,7 +250,7 @@ class TableViewContentDetailCell: UITableViewCell{
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 15
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        stackView.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
@@ -299,7 +310,7 @@ class TableViewContentDetailCell: UITableViewCell{
             make.size.equalTo(36)
         }
         
-        nicknameLabel.textColor = .black
+        nicknameLabel.textColor = .label
         nicknameLabel.textAlignment = .left
         
         dateLabel.textAlignment = .left
@@ -349,7 +360,7 @@ class TableViewCommentCell: UITableViewCell{
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 5
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 10, right: 20)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()

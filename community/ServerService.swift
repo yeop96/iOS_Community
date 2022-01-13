@@ -33,6 +33,7 @@ class ServerService{
                 return
             }
             
+            
             if let data = data, let authData = try?
                 JSONDecoder().decode(Auth.self, from: data){
                 completion(authData)
@@ -53,23 +54,20 @@ class ServerService{
         let param = "username=\(username)&email=\(email)&password=\(password)"
         let paramData = param.data(using: .utf8)
         
-        //URL 객체 정의
         let url = URL(string: "http://test.monocoding.com:1231/auth/local/register")
         
-        //URLRequest 객체 정의
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         request.httpBody = paramData
         
-        //(응답 메시지(Data), 응답 정보(URLResponse), 오류 정보(Error))
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             
-            //서버가 응답이 없거나 통신이 실패
             if let e = error{
                 print("e : \(e.localizedDescription)")
                 return
             }
+            
             
             if let data = data, let authData = try?
                 JSONDecoder().decode(Auth.self, from: data){
@@ -79,9 +77,8 @@ class ServerService{
             completion(nil)
             
             
-        }//task - end
+        }
         
-        //post 전송
         task.resume()
         
     }
@@ -424,6 +421,5 @@ class ServerService{
         task.resume()
 
     }
-    
     
 }

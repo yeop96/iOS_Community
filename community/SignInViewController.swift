@@ -19,6 +19,7 @@ class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
         stackView.distribution = .fillEqually
         return stackView
     }()
+    let logoImageView = UIImageView()
     let idTextField = UITextField()
     let passwordTextField = UITextField()
     let signInButton = UIButton()
@@ -29,9 +30,8 @@ class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
         super.viewDidLoad()
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
-        view.backgroundColor = .white
         title = "로그인"
-        
+        view.addSubview(logoImageView)
         view.addSubview(stackView)
         stackView.addArrangedSubview(idTextField)
         stackView.addArrangedSubview(passwordTextField)
@@ -46,14 +46,25 @@ class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
     }
     
     func setUp(){
+        view.backgroundColor = .systemBackground
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(backButtonClicked))
         
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.equalTo(20)
-            make.trailing.equalTo(-20)
+        logoImageView.image = UIImage(named: "pinkCat.png")
+        logoImageView.backgroundColor = .clear
+        logoImageView.contentMode = .scaleToFill
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
             make.height.equalTo(100)
+            make.width.equalTo(100)
         }
+        
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(logoImageView.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+        }
+        
         idTextField.placeholder = "이메일"
         idTextField.borderStyle = .roundedRect
         
@@ -62,13 +73,17 @@ class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
         passwordTextField.isSecureTextEntry = true
         
         signInButton.setTitle("로그인", for: .normal)
-        signInButton.backgroundColor = .black
+        signInButton.setTitleColor(.systemBackground, for: .normal)
+        signInButton.backgroundColor = .label
+        signInButton.layer.cornerRadius = 10
         signInButton.addTarget(self, action: #selector(signInButtonClicked), for: .touchUpInside)
         signInButton.snp.makeConstraints { make in
-            make.leadingMargin.equalTo(view)
-            make.trailingMargin.equalTo(view)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            make.height.equalTo(50)
         }
+        
     }
     
     @objc func backButtonClicked(){
@@ -95,6 +110,7 @@ class SignInViewController: UIViewController, UIGestureRecognizerDelegate{
                 let nav = UINavigationController(rootViewController: CommunityListViewController())
                 windowScene.windows.first?.rootViewController = nav
                 windowScene.windows.first?.makeKeyAndVisible()
+                
             }
         }
     }

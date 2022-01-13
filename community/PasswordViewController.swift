@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import NotificationBannerSwift
 
 class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
     let serverService = ServerService()
@@ -19,7 +20,7 @@ class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
+    let logoImageView = UIImageView()
     let idTextField = UITextField()
     let currentPasswordTextField = UITextField()
     let newPasswordTextField = UITextField()
@@ -32,9 +33,9 @@ class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
         super.viewDidLoad()
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
-        view.backgroundColor = .white
         title = "비밀번호 변경"
         
+        view.addSubview(logoImageView)
         view.addSubview(stackView)
         stackView.addArrangedSubview(idTextField)
         stackView.addArrangedSubview(currentPasswordTextField)
@@ -51,14 +52,26 @@ class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
     }
     
     func setUp(){
+        view.backgroundColor = .systemBackground
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissButtonClicked))
         
+        logoImageView.image = UIImage(named: "pinkCat.png")
+        logoImageView.backgroundColor = .clear
+        logoImageView.contentMode = .scaleToFill
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(100)
+            make.width.equalTo(100)
+        }
+        
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(logoImageView.snp.bottom).offset(20)
             make.leading.equalTo(20)
             make.trailing.equalTo(-20)
-            make.height.equalTo(100)
         }
+        
         guard let email = UserDefaults.standard.string(forKey: "email") else { return }
         idTextField.text = email
         idTextField.borderStyle = .roundedRect
@@ -77,12 +90,15 @@ class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
         confirmNewPasswordTextField.isSecureTextEntry = true
         
         changeButton.setTitle("변경하기", for: .normal)
-        changeButton.backgroundColor = .black
+        changeButton.setTitleColor(.systemBackground, for: .normal)
+        changeButton.backgroundColor = .label
+        changeButton.layer.cornerRadius = 10
         changeButton.addTarget(self, action: #selector(changeButtonClicked), for: .touchUpInside)
         changeButton.snp.makeConstraints { make in
-            make.leadingMargin.equalTo(view)
-            make.trailingMargin.equalTo(view)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            make.height.equalTo(50)
         }
     }
     
@@ -95,6 +111,14 @@ class PasswordViewController: UIViewController, UIGestureRecognizerDelegate{
         let currentPassword = currentPasswordTextField.text!
         let newPassword = newPasswordTextField.text!
         let confirmNewPassword = confirmNewPasswordTextField.text!
+        
+        if newPasswordTextField.text != confirmNewPasswordTextField.text{
+            let banner = NotificationBanner(subtitle: "비밀번호 확인이 다릅니다.", style: .success)
+            banner.titleLabel?.textColor = .label
+            banner.duration = 1
+            banner.show()
+            return
+        }
         
         serverService.requestChangePassword(jwt: jwt, currentPassword: currentPassword, newPassword: newPassword, confirmNewPassword: confirmNewPassword) { data in
             UserDefaults.standard.set(newPassword, forKey: "password")

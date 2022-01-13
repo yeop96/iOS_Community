@@ -21,16 +21,13 @@ class CommunityListViewController: UIViewController{
         getPost()
         tableView.register(TableViewContentCell.self, forCellReuseIdentifier: "TableViewContentCell")
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         title = "커뮤니팅"
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
-        tableView.backgroundColor = .white
-        tableView.separatorStyle = .none
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leadingMargin.trailingMargin.equalToSuperview().inset(20)
+            make.edges.equalToSuperview()
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(settingButtonClicked))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(postButtonClicked))
@@ -61,6 +58,7 @@ class CommunityListViewController: UIViewController{
                 let nav = UINavigationController(rootViewController: WelcomeViewController())
                 windowScene.windows.first?.rootViewController = nav
                 windowScene.windows.first?.makeKeyAndVisible()
+                
             }
         }
         let noAction = UIAlertAction(title: "취소", style: .cancel)
@@ -101,7 +99,8 @@ extension CommunityListViewController: UITableViewDelegate, UITableViewDataSourc
         cell.selectionStyle = .none
         cell.nicknameLabel.text = post.user.username
         cell.contentLabel.text = post.text
-        cell.dateLabel.text = post.created_at
+        let creatAt = post.created_at.split(separator: "T")
+        cell.dateLabel.text = creatAt[0].replacingOccurrences(of: "-", with: "/")
         cell.commentLabel.text = post.comments.count == 0 ? "댓글쓰기" : "댓글 \(post.comments.count)"
         return cell
     }
@@ -109,7 +108,6 @@ extension CommunityListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = ContentViewController()
         vc.postContent = posts[indexPath.row]
-        //print(posts[indexPath.row].comments)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -122,7 +120,7 @@ class TableViewContentCell: UITableViewCell{
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 15
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        stackView.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()

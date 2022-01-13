@@ -25,8 +25,7 @@ class WelcomeViewController: UIViewController{
     
     
     func setUp(){
-        view.backgroundColor = .white
-        
+        view.backgroundColor = .systemBackground
         titleLabel.text = "커뮤니티ing"
         titleLabel.font = .boldSystemFont(ofSize: 20)
         titleLabel.textAlignment = .center
@@ -34,7 +33,7 @@ class WelcomeViewController: UIViewController{
             make.center.equalToSuperview()
         }
         
-        detailLabel.text = "커뮤니티와 함께 하자\n드가자"
+        detailLabel.text = "커뮤니티와 함께\n드가자"
         detailLabel.numberOfLines = 0
         detailLabel.textAlignment = .center
         detailLabel.snp.makeConstraints { make in
@@ -53,15 +52,15 @@ class WelcomeViewController: UIViewController{
         }
         
         startButton.setTitle("시작하기", for: .normal)
-        startButton.setTitleColor(.white, for: .normal)
-        startButton.backgroundColor = .black
+        startButton.setTitleColor(.systemBackground, for: .normal)
+        startButton.backgroundColor = .label
         startButton.layer.cornerRadius = 10
         startButton.addTarget(self, action: #selector(startButtonClicked), for: .touchUpInside)
         startButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.leading.equalTo(20)
-            make.trailing.equalTo(-20)
-            make.bottom.equalTo(view.snp.bottom).offset(-200)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(signInButton.snp.top)
+            make.height.equalTo(50)
         }
         
         signInButton.setTitle("이미 계정이 있나요? 로그인", for: .normal)
@@ -70,9 +69,9 @@ class WelcomeViewController: UIViewController{
         signInButton.addTarget(self, action: #selector(signInButtonClicked), for: .touchUpInside)
         signInButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.leading.equalTo(20)
-            make.trailing.equalTo(-20)
-            make.bottom.equalTo(view.snp.bottom).offset(-100)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            make.height.equalTo(50)
         }
         
     }
